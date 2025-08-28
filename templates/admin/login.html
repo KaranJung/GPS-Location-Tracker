@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    body {
+        background: #1e1e1e;
+        color: #e0e0e0;
+        font-family: 'Consolas', 'Monaco', monospace;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-container {
+        background: #252526;
+        border: 1px solid #3c3c3c;
+        border-radius: 4px;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .login-container h1 {
+        margin: 0 0 30px 0;
+        font-size: 1.5em;
+        color: #e0e0e0;
+        font-weight: normal;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #cccccc;
+        font-size: 14px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        background: #1e1e1e;
+        border: 1px solid #3c3c3c;
+        border-radius: 2px;
+        color: #e0e0e0;
+        font-family: inherit;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #0e639c;
+        background: #2d2d30;
+    }
+
+    .login-button {
+        width: 100%;
+        background: #0e639c;
+        color: #ffffff;
+        border: 1px solid #1177bb;
+        padding: 12px;
+        border-radius: 2px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .login-button:hover {
+        background: #1177bb;
+    }
+
+    .error {
+        background: #f14c4c;
+        color: #ffffff;
+        padding: 12px;
+        border-radius: 2px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .footer {
+        margin-top: 30px;
+        color: #888;
+        font-size: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h1>Admin Access</h1>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required autofocus>
+        </div>
+        
+        <button type="submit" class="login-button">Login</button>
+    </form>
+    
+    <div class="footer">
+        Location Tracker Admin Dashboard
+    </div>
+</div>
+{% endblock %}

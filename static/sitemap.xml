@@ -1,0 +1,21 @@
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"
+        xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\">
+    
+    <url>
+        <loc>{{ request.url_root }}</loc>
+        <lastmod>2025-01-21</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+        <news:news>
+            <news:publication>
+                <news:name>Nepal Transparency Initiative</news:name>
+                <news:language>en</news:language>
+            </news:publication>
+            <news:publication_date>2025-01-21</news:publication_date>
+            <news:title>Nepal's Most Corrupt Districts Exposed: Investigation Reveals ₹1.8 Billion in Fraud</news:title>
+            <news:keywords>Nepal corruption, investigation, district corruption, transparency</news:keywords>
+        </news:news>
+    </url>
+    
+</urlset>

@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: /sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Preferred URLs
+Prefer: /
+
+# Contact information
+# Contact: admin@nepaltransparency.org

