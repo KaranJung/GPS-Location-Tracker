@@ -1,4 +1,13 @@
-# GPS Location Tracker
+
+<p align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/Hydra_symbol.png/200px-Hydra_symbol.png" 
+       alt="Hydra Logo" width="150" />
+</p>
+
+<h1 align="center" style="color:red;">🟥 HYDRA GPS Location Tracker 🟥</h1>
+<p align="center">
+  <b>Real-time location and device tracking system with admin dashboard — for <i>educational purposes only</i>.</b>
+</p># GPS Location Tracker
 
 Real-time location and device tracking system with admin dashboard for educational purposes.
 
@@ -176,3 +185,4 @@ ssh -R 80:localhost:5000 serveo.net
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
