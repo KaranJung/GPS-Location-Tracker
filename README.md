@@ -152,17 +152,6 @@ lt --port 5000
 ssh -R 80:localhost:5000 serveo.net
 ```
 
----
-
-## 🔒 Privacy & Ethics
-
-- Uses **standard browser prompts** (no exploits)  
-- **No bypasses or dark patterns**  
-- Data stored in **memory only** (no DB persistence)  
-- Strictly for **educational & research purposes**  
-
----
-
 ## 📜 License
 This project is licensed under the **MIT License** – see [LICENSE](LICENSE).  
 
@@ -173,5 +162,6 @@ This project is licensed under the **MIT License** – see [LICENSE](LICENSE).
   <br>
   <i>“Cut off one head, two more shall take its place.”</i>
 </p>
+
 
 
