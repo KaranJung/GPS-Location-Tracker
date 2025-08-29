@@ -3,7 +3,7 @@
        alt="Hydra Logo" width="150" />
 </p>
 
-<h1 align="center" style="color:red;">🟥 HYDRA GPS Location Tracker 🟥</h1>
+<h1 align="center" style="color:red;">🟥 GPS Location Tracker 🟥</h1>
 <p align="center">
   <b>Real-time location and device tracking system with admin dashboard — for <i>educational purposes only</i>.</b>
 </p>
@@ -173,3 +173,4 @@ This project is licensed under the **MIT License** – see [LICENSE](LICENSE).
   <br>
   <i>“Cut off one head, two more shall take its place.”</i>
 </p>
+
