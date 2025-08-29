@@ -169,8 +169,9 @@ This project is licensed under the **MIT License** – see [LICENSE](LICENSE).
 ---
 
 <p align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/en/9/9b/Hydra_symbol.png" alt="Hydra Symbol" width="100" />
+  <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/f0d862b3-1479-4b52-ada5-c1be455a97cd/d7l7w5e-5ff824b4-cf8c-4df7-8565-52fefc813e84.png/v1/fill/w_503,h_497,strp/hydra_logo_3_by_silver2012_d7l7w5e-fullview.png" alt="Hydra Symbol" width="100" />
   <br>
   <i>“Cut off one head, two more shall take its place.”</i>
 </p>
+
 
