@@ -1,15 +1,13 @@
 
 <p align="center">
-  <img src="https://toppng.com/uploads/preview/red-skull-captain-america-hydra-logo-symbol-octonauts-hydra-11563046483rv1t6kmsgv.png" 
+  <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/46698a0d-2dc6-4f9f-99a6-196c954a909f/d8apgfl-5d9d9f3c-a182-4f19-a970-93d4df22647e.png" 
        alt="Hydra Logo" width="150" />
 </p>
 
 <h1 align="center" style="color:red;">🟥 HYDRA GPS Location Tracker 🟥</h1>
 <p align="center">
   <b>Real-time location and device tracking system with admin dashboard — for <i>educational purposes only</i>.</b>
-</p># GPS Location Tracker
-
-Real-time location and device tracking system with admin dashboard for educational purposes.
+</p>
 
 ## 🚀 Quick Start
 
@@ -185,6 +183,7 @@ ssh -R 80:localhost:5000 serveo.net
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
 
 
 
