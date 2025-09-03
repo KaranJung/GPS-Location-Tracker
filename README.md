@@ -14,7 +14,6 @@
 
 **Real-time GPS tracking with admin dashboard and location analytics — for educational and consented testing purposes only.**
 
-![Dashboard Preview](assets/dashboard-preview.png)
 
 > ⚠️ **Educational Use Only**: This project is designed for consented demonstrations, security education, and authorized testing. Never deploy without explicit user consent or in violation of local laws.
 
@@ -177,7 +176,6 @@ gps_tracker/
 4. Push to branch (`git push origin feature/amazing-feature`)  
 5. Open a Pull Request
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 🐛 Troubleshooting
 
@@ -208,5 +206,6 @@ This software is provided for educational and research purposes only. Users are 
 **"Cut off one head, two more shall take its place."**
 
 Made with ❤️ for educational purposes
+
 
 
