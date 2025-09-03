@@ -67,7 +67,7 @@ python app.py
 ## 🌐 Access URLs
 
 - **Target Page**: `http://localhost:5000/`
-- **Admin Dashboard**: `http://localhost:5000/admin_dashboard` (configurable)
+- **Admin Dashboard**: `http://localhost:5000/admin_893b4de8f1` (configurable)
 
 ## ⚙️ Configuration
 
@@ -82,7 +82,7 @@ Create a `.env` file or use environment variables:
 | `TELEGRAM` | Bot token:chat_id format | `None` |
 | `KML_OUTPUT` | KML export file path | `None` |
 | `ADMIN_PASSWORD` | Admin dashboard password | **Required** |
-| `ADMIN_PATH` | Admin URL path | `admin_dashboard` |
+| `ADMIN_PATH` | Admin URL path | `admin_893b4de8f1` |
 
 ### Command Line Options
 
@@ -206,6 +206,7 @@ This software is provided for educational and research purposes only. Users are 
 **"Cut off one head, two more shall take its place."**
 
 Made with ❤️ for educational purposes
+
 
 
 
